@@ -1,31 +1,33 @@
 package com.simple.rookie.dao.entity;
 
+import com.simple.rookie.enums.AddressType;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.util.Date;
-import java.util.List;
 
 @Data
 @Entity
-@Table(name = "customer")
-public class Customer {
+@Table(name = "address")
+public class Address {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "customer_id")
-    private Integer customerId;
+    @Column(name = "address_id")
+    private Integer addressId;
 
-    @Column(name = "user_name", nullable = false)
-    private String userName;
+    @Column(name = "type", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private AddressType type;
 
-    @Column(name = "password", nullable = false)
-    private String password;
+    @Column(name = "address", nullable = false)
+    private String address;
 
-    @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<Address> address;
+    @JoinColumn(name = "customer_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Customer customer;
 
     @Column(name = "create_by", updatable = false)
     private String createBy;
@@ -40,5 +42,4 @@ public class Customer {
     @UpdateTimestamp
     @Column(name = "update_date", insertable = false)
     private Date updateDate;
-
 }

@@ -1,5 +1,6 @@
 package com.simple.rookie.service.manual;
 
+import com.simple.rookie.config.BusinessException;
 import com.simple.rookie.dao.repository.CustomerRepository;
 import com.simple.rookie.service.AuthService;
 import com.simple.rookie.service.SignInRequest;
@@ -25,7 +26,7 @@ public class AuthServiceManualTest {
     }
 
     @Test
-    void stub() throws Exception {
+    void stub() {
         AuthService service = new AuthService(new StubCustomerRepository());
         SignInResponse signInResponse = service.signIn(new SignInRequest());
         Assertions.assertNotNull(signInResponse);
@@ -35,12 +36,18 @@ public class AuthServiceManualTest {
     void spy() {
         SpyCustomerRepository spy = new SpyCustomerRepository();
         AuthService service = new AuthService(spy);
-        Assertions.assertThrows(Exception.class, () -> service.signIn(new SignInRequest()), "invalid credentials");
+        Assertions.assertThrows(BusinessException.class, () -> service.signIn(new SignInRequest()), "invalid credentials");
         Assertions.assertEquals(true, spy.isFindByUserNameWasCalled());
     }
 
     @Test
-    void mock() throws Exception {
+    void fake() {
+        AuthService service = new AuthService(customerRepository);
+        Assertions.assertThrows(BusinessException.class, () -> service.signIn(new SignInRequest()), "invalid credentials");
+    }
+
+    @Test
+    void mock() {
         MockCustomerRepository mock = new MockCustomerRepository();
         AuthService service = new AuthService(mock);
         SignInResponse signInResponse = service.signIn(new SignInRequest());

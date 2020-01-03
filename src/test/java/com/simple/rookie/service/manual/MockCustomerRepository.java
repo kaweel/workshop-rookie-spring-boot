@@ -1,6 +1,8 @@
 package com.simple.rookie.service.manual;
 
 import com.simple.rookie.dao.entity.Customer;
+import com.simple.rookie.dao.mapping.CustomerAddressJQL;
+import com.simple.rookie.dao.mapping.CustomerAddressNative;
 import com.simple.rookie.dao.repository.CustomerRepository;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
@@ -16,6 +18,22 @@ public class MockCustomerRepository implements CustomerRepository {
 
     public boolean isFindByUserNameWasCalled() {
         return findByUserNameWasCalled;
+    }
+
+
+    @Override
+    public Optional<Customer> findByUserName(String userName) {
+        return Optional.empty();
+    }
+
+    @Override
+    public List<CustomerAddressNative> findByUserNameNative(String userName) {
+        return null;
+    }
+
+    @Override
+    public List<CustomerAddressJQL> findByUserNameJQL(String userName) {
+        return null;
     }
 
     @Override

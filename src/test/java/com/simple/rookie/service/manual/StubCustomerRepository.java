@@ -1,6 +1,8 @@
 package com.simple.rookie.service.manual;
 
 import com.simple.rookie.dao.entity.Customer;
+import com.simple.rookie.dao.mapping.CustomerAddressJQL;
+import com.simple.rookie.dao.mapping.CustomerAddressNative;
 import com.simple.rookie.dao.repository.CustomerRepository;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
@@ -11,6 +13,22 @@ import java.util.List;
 import java.util.Optional;
 
 public class StubCustomerRepository implements CustomerRepository {
+
+    @Override
+    public Optional<Customer> findByUserName(String userName) {
+        return Optional.empty();
+    }
+
+    @Override
+    public List<CustomerAddressNative> findByUserNameNative(String userName) {
+        return null;
+    }
+
+    @Override
+    public List<CustomerAddressJQL> findByUserNameJQL(String userName) {
+        return null;
+    }
+
     @Override
     public Optional<Customer> auth(String userName, String password) {
         return Optional.of(new Customer());

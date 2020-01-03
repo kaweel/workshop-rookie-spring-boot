@@ -1,7 +1,9 @@
 package com.simple.rookie.service;
 
+import com.simple.rookie.config.BusinessException;
 import com.simple.rookie.dao.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -17,9 +19,9 @@ public class AuthService {
         this.customerRepository = customerRepository;
     }
 
-    public SignInResponse signIn(SignInRequest request) throws Exception {
+    public SignInResponse signIn(SignInRequest request) {
         customerRepository.auth(request.getUserName(), request.getPassword())
-                .orElseThrow(() -> new Exception("invalid credentials"));
+                .orElseThrow(() -> new BusinessException(HttpStatus.FORBIDDEN, "invalid credentials"));
         return new SignInResponse(UUID.randomUUID().toString());
     }
 }
