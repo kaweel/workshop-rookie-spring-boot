@@ -10,10 +10,22 @@ spring:
       hibernate.format_sql: true
       hibernate.dialect: org.hibernate.dialect.H2Dialect
   datasource:
-    driverClassName: org.h2.Driver
     url: jdbc:h2:mem:testdb;DB_CLOSE_ON_EXIT=FALSE
     username: rookie
     password:
+
+#spring:
+#  jpa:
+#    properties:
+#      javax:
+#        persistence:
+#          schema-generation:
+#            create-source: metadata
+#            drop-source: metadata
+#            scripts:
+#              action: drop-and-create
+#              create-target: create.sql
+#              drop-target: drop.sql
 
 ##### Resttemplate #####
 rest:

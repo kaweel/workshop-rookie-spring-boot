@@ -45,6 +45,21 @@ public interface CustomerRepository extends JpaRepository<Customer, Integer> {
     List<CustomerAddressJQL> findByUserNameJQL(@Param("userName") String userName);
 
     @Query(
+            value = "SELECT " +
+                    "new com.simple.rookie.dao.mapping.CustomerAddressJQL(\n" +
+                    "cu.customerId,\n" +
+                    "cu.userName,\n" +
+                    "ad.addressId,\n" +
+                    "ad.type,\n" +
+                    "ad.address" +
+                    ")\n" +
+                    "FROM Customer cu\n" +
+                    "JOIN cu.address ad\n" +
+                    "WHERE cu.customerId = :customerId"
+    )
+    List<CustomerAddressJQL> findByCustomerId(@Param("customerId") Integer customerId);
+
+    @Query(
             value = "SELECT cu \n" +
                     "FROM Customer cu\n" +
                     "WHERE cu.userName = :userName\n" +

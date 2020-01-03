@@ -30,6 +30,11 @@ public class StubCustomerRepository implements CustomerRepository {
     }
 
     @Override
+    public List<CustomerAddressJQL> findByCustomerId(Integer customerId) {
+        return null;
+    }
+
+    @Override
     public Optional<Customer> auth(String userName, String password) {
         return Optional.of(new Customer());
     }

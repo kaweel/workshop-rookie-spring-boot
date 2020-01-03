@@ -11,7 +11,11 @@ public class CustomerAddressJQL {
     private AddressType addressType;
     private String address;
 
-    public CustomerAddressJQL(Integer customerId, String userName, Integer addressId, AddressType addressType, String address) {
+    public CustomerAddressJQL(
+            Integer customerId, String userName,
+            Integer addressId, AddressType addressType,
+            String address
+    ) {
         this.customerId = customerId;
         this.userName = userName;
         this.addressId = addressId;

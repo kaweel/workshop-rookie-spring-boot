@@ -1,0 +1,16 @@
+version: '3.3'
+
+services:
+
+  rookie-mysql:
+    container_name: rookie-mysql
+    image: mysql:8.0.2
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rookie
+      MYSQL_DATABASE: rookie
+      TZ: Asia/Bangkok
+    volumes:
+      - ./mysql-volume:/var/lib/mysql:rw
+    ports:
+      - 3310:3306
