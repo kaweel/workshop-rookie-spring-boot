@@ -2,7 +2,10 @@ package com.simple.rookie;
 
 import com.simple.rookie.dao.entity.Customer;
 import com.simple.rookie.dao.repository.CustomerRepository;
+import com.simple.rookie.service.AuthService;
 import com.simple.rookie.service.GithubUserService;
+import com.simple.rookie.service.SignInRequest;
+import com.simple.rookie.service.SignInResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -15,6 +18,9 @@ public class RookieApplication implements CommandLineRunner {
 
     @Autowired
     GithubUserService githubUserService;
+
+    @Autowired
+    AuthService authService;
 
     @Autowired
     CustomerRepository customerRepository;
@@ -33,10 +39,21 @@ public class RookieApplication implements CommandLineRunner {
 
         Integer before = customerRepository.findAll().size();
         System.out.println("before : " + before);
-        customerRepository.save(new Customer());
+
+        Customer customer = new Customer();
+        customer.setUserName("kaweel");
+        customer.setPassword("1234");
+        customerRepository.save(customer);
+
         Integer after = customerRepository.findAll().size();
         System.out.println("after : " + after);
 
+        SignInRequest signInRequest = new SignInRequest();
+        signInRequest.setUserName("kaweel");
+        signInRequest.setPassword("1234");
+
+        SignInResponse signInResponse = authService.signIn(signInRequest);
+        System.out.println("token : " + signInResponse.getToken());
 
     }
 }
