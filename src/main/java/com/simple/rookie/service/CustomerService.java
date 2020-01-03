@@ -105,22 +105,23 @@ public class CustomerService {
             throw new BusinessException(HttpStatus.CONFLICT, "duplicate username");
         }
 
+        if (CollectionUtils.isEmpty(request.getAddress())) {
+            throw new BusinessException(HttpStatus.BAD_REQUEST, "address can't be null");
+        }
+
         customer = new Customer();
         customer.setUserName(request.getUsername());
         customer.setPassword(request.getPassword());
         customer.setCreateBy(CREATOR_ROOKIE);
 
-        List<Address> addressList = null;
-        if (!CollectionUtils.isEmpty(request.getAddress())) {
-            addressList = new ArrayList<>();
-            for (CreateCustomerRequest.Address it : request.getAddress()) {
-                Address address = new Address();
-                address.setType(it.getType());
-                address.setAddress(it.getAddress());
-                address.setCustomer(customer);
-                address.setCreateBy(CREATOR_ROOKIE);
-                addressList.add(address);
-            }
+        List<Address> addressList = new ArrayList<>();
+        for (CreateCustomerRequest.Address it : request.getAddress()) {
+            Address address = new Address();
+            address.setType(it.getType());
+            address.setAddress(it.getAddress());
+            address.setCustomer(customer);
+            address.setCreateBy(CREATOR_ROOKIE);
+            addressList.add(address);
         }
         customer.setAddress(addressList);
         customerRepository.save(customer);
@@ -138,37 +139,38 @@ public class CustomerService {
             throw new BusinessException(HttpStatus.NOT_FOUND, "customer not found");
         }
 
-        List<Address> srcAddressList = customer.getAddress();
-        List<Address> updateAddressList = null;
-
-        if (!CollectionUtils.isEmpty(request.getAddress())) {
-            updateAddressList = request.getAddress().stream()
-                    .map(rq -> {
-
-                        Address address;
-                        if (null == rq.getId()) {
-                            address = new Address();
-                            address.setCustomer(customer);
-                            address.setCreateBy(CREATOR_ROOKIE);
-                        } else {
-                            address = srcAddressList.stream()
-                                    .filter(update -> update.getAddressId() == rq.getId())
-                                    .findFirst()
-                                    .orElse(null);
-
-                            if (null == address) {
-                                return null;
-                            }
-
-                            address.setUpdateBy(CREATOR_ROOKIE);
-                        }
-                        address.setType(rq.getType());
-                        address.setAddress(rq.getAddress());
-                        return address;
-                    })
-                    .filter(Objects::nonNull)
-                    .collect(Collectors.toList());
+        if (CollectionUtils.isEmpty(request.getAddress())) {
+            throw new BusinessException(HttpStatus.BAD_REQUEST, "address can't be null");
         }
+
+        List<Address> srcAddressList = customer.getAddress();
+        List<Address> updateAddressList = request.getAddress().stream()
+                .map(rq -> {
+
+                    Address address;
+                    if (null == rq.getId()) {
+                        address = new Address();
+                        address.setCustomer(customer);
+                        address.setCreateBy(CREATOR_ROOKIE);
+                    } else {
+                        address = srcAddressList.stream()
+                                .filter(update -> update.getAddressId() == rq.getId())
+                                .findFirst()
+                                .orElse(null);
+
+                        if (null == address) {
+                            return null;
+                        }
+
+                        address.setUpdateBy(CREATOR_ROOKIE);
+                    }
+                    address.setType(rq.getType());
+                    address.setAddress(rq.getAddress());
+                    return address;
+                })
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
+
         customer.setUserName(request.getUsername());
         customer.setAddress(updateAddressList);
         customerRepository.save(customer);
