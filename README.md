@@ -4,6 +4,9 @@
 ## Build 
 ```./mvnw clean install```
 
+## Start Database(mysql)
+```docker-compose up```
+
 ## Run
 ```java -jar target/rookie-0.0.1-SNAPSHOT.jar```
 
