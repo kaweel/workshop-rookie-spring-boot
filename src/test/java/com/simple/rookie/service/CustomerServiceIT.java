@@ -6,7 +6,6 @@ import com.simple.rookie.controller.response.SignInResponse;
 import com.simple.rookie.dao.repository.CustomerRepository;
 import com.simple.rookie.enums.AddressType;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +14,6 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 
 @ExtendWith(SpringExtension.class)

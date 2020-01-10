@@ -1,7 +1,7 @@
 package com.simple.rookie.controller;
 
-import com.simple.rookie.service.AuthService;
 import com.simple.rookie.controller.request.SignInRequest;
+import com.simple.rookie.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

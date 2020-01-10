@@ -1,10 +1,10 @@
 package com.simple.rookie.service.manual;
 
 import com.simple.rookie.config.BusinessException;
-import com.simple.rookie.dao.repository.CustomerRepository;
-import com.simple.rookie.service.AuthService;
 import com.simple.rookie.controller.request.SignInRequest;
 import com.simple.rookie.controller.response.SignInResponse;
+import com.simple.rookie.dao.repository.CustomerRepository;
+import com.simple.rookie.service.AuthService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
