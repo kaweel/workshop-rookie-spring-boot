@@ -27,6 +27,11 @@ public class MockCustomerRepository implements CustomerRepository {
     }
 
     @Override
+    public void deleteByUserName(String userName) {
+
+    }
+
+    @Override
     public List<CustomerAddressNative> findByUserNameNative(String userName) {
         return null;
     }

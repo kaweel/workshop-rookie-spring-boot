@@ -7,6 +7,7 @@ import com.simple.rookie.controller.response.GetCustomerResponse;
 import com.simple.rookie.dao.entity.Address;
 import com.simple.rookie.dao.entity.Customer;
 import com.simple.rookie.dao.mapping.CustomerAddressJQL;
+import com.simple.rookie.dao.repository.AddressRepository;
 import com.simple.rookie.dao.repository.CustomerRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,14 +26,17 @@ public class CustomerService {
     public static final String CREATOR_ROOKIE = "rookie";
 
     private CustomerRepository customerRepository;
+    private AddressRepository addressRepository;
     private AuthService authService;
 
     @Autowired
     public CustomerService(
             CustomerRepository customerRepository,
+            AddressRepository addressRepository,
             AuthService authService
     ) {
         this.customerRepository = customerRepository;
+        this.addressRepository = addressRepository;
         this.authService = authService;
     }
 
@@ -106,7 +110,7 @@ public class CustomerService {
         }
 
         if (CollectionUtils.isEmpty(request.getAddress())) {
-            throw new BusinessException(HttpStatus.BAD_REQUEST, "address can't be null");
+            throw new BusinessException(HttpStatus.BAD_REQUEST, "address can't be empty");
         }
 
         customer = new Customer();
@@ -144,35 +148,51 @@ public class CustomerService {
         }
 
         List<Address> srcAddressList = customer.getAddress();
-        List<Address> updateAddressList = request.getAddress().stream()
-                .map(rq -> {
 
-                    Address address;
-                    if (null == rq.getId()) {
-                        address = new Address();
-                        address.setCustomer(customer);
-                        address.setCreateBy(CREATOR_ROOKIE);
-                    } else {
-                        address = srcAddressList.stream()
-                                .filter(update -> update.getAddressId() == rq.getId())
-                                .findFirst()
-                                .orElse(null);
-
-                        if (null == address) {
-                            return null;
-                        }
-
-                        address.setUpdateBy(CREATOR_ROOKIE);
+        List<Address> insertAddressList = request.getAddress().stream()
+                .map(it -> {
+                    if (null != it.getId()) {
+                        return null;
                     }
-                    address.setType(rq.getType());
-                    address.setAddress(rq.getAddress());
+                    Address address = new Address();
+                    address.setType(it.getType());
+                    address.setAddress(it.getAddress());
+                    address.setCustomer(customer);
+                    address.setCreateBy(CREATOR_ROOKIE);
                     return address;
                 })
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
 
+        List<Address> updateAddressList = request.getAddress().stream()
+                .map(it -> {
+                    if (null == it.getId()) {
+                        return null;
+                    }
+                    Address address = srcAddressList.stream()
+                            .filter(update -> update.getAddressId() == it.getId())
+                            .findAny()
+                            .orElse(null);
+
+                    address.setAddress(it.getAddress());
+                    address.setType(it.getType());
+
+                    return address;
+                })
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
+
+        log.info("insert {}", insertAddressList.size());
+        log.info("update {}", updateAddressList.size());
+
+        List<Address> actionList = new ArrayList<>();
+        actionList.addAll(insertAddressList);
+        actionList.addAll(updateAddressList);
+
         customer.setUserName(request.getUsername());
-        customer.setAddress(updateAddressList);
+        customer.getAddress().clear();
+        customer.setAddress(actionList);
+        log.info("actual {}", customer.getAddress().size());
         customerRepository.save(customer);
     }
 

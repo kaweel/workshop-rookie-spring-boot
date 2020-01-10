@@ -4,6 +4,7 @@ import com.simple.rookie.dao.entity.Customer;
 import com.simple.rookie.dao.mapping.CustomerAddressJQL;
 import com.simple.rookie.dao.mapping.CustomerAddressNative;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -13,6 +14,13 @@ import java.util.Optional;
 public interface CustomerRepository extends JpaRepository<Customer, Integer> {
 
     Optional<Customer> findByUserName(String userName);
+
+
+    @Modifying
+    @Query(
+            value = "DELETE FROM Customer cu WHERE cu.userName = :userName"
+    )
+    void deleteByUserName(@Param("userName") String userName);
 
     @Query(
             value = "SELECT " +
