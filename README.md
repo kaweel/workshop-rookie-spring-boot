@@ -1,10 +1,7 @@
-# workshop-rookie-spring-boot
-
-
-## test
+## Test
 ```./mvnw test.```
 
-## build 
+## Build 
 ```./mvnw clean install .```
 
 ## Run
