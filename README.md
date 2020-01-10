@@ -1,4 +1,6 @@
-# workshop-rookie-spring-boot.
+# workshop-rookie-spring-boot
+
+
 #### test
 ./mvnw test.
 #### build 
