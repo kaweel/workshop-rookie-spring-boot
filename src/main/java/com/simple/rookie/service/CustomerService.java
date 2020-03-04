@@ -182,9 +182,6 @@ public class CustomerService {
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
 
-        log.info("insert {}", insertAddressList.size());
-        log.info("update {}", updateAddressList.size());
-
         List<Address> actionList = new ArrayList<>();
         actionList.addAll(insertAddressList);
         actionList.addAll(updateAddressList);
@@ -192,7 +189,6 @@ public class CustomerService {
         customer.setUserName(request.getUsername());
         customer.getAddress().clear();
         customer.setAddress(actionList);
-        log.info("actual {}", customer.getAddress().size());
         customerRepository.save(customer);
     }
 
